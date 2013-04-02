@@ -1,0 +1,37 @@
+{
+  "name": "promises-by-example",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Introduction talk to Promises in JavaScript",
+  "subdomain": "promises-by-example",
+  "scripts": {
+    "test": "grunt jshint",
+    "start": ""
+  },
+  "author": {
+    "name": "David Padbury",
+    "email": "david@davidpadbury.com",
+    "web": "http://davidpadbury.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:davidpadbury/promises-by-example.git"
+  },
+  "engines": {
+    "node": "~0.8.0"
+  },
+  "dependencies": {
+    "underscore": "~1.3.3",
+    "express": "~2.5.9",
+    "mustache": "~0.4.0",
+    "socket.io": "~0.9.13"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.2.0",
+    "grunt-contrib-cssmin": "~0.4.1",
+    "grunt-contrib-uglify": "~0.1.1",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt-contrib-sass": "~0.2.2",
+    "grunt": "~0.4.0"
+  }
+}
