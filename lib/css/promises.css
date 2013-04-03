@@ -1,0 +1,14 @@
+.promises button {
+    color: white;
+    height: 30px;
+    border: none;
+    padding: 5px;
+}
+
+.promises button.resolve {
+    background-color: #55d98d;
+}
+
+.promises button.reject {
+    background-color: #ec7063;
+}
