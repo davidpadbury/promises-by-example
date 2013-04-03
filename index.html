@@ -158,85 +158,134 @@ function login(username, password, callback) {
                     <p><code>function callback(err, value) { ... }</code></p>
                 </section>
                 <section>
-                    <pre><code>
-function isEven(n) {
-	if (typeof n !== 'number') {
-		// Intentionally over picky, it's an example...
-		throw new Error('n must be a number');
-	}
-
-	return n % 2 === 0;
-}
-                    </code></pre>
-                    <p>becomes...</p>
+                	<p>Promises are a slightly different approach</p>
                 </section>
                 <section>
-                    <pre><code>
-function isEvenAsync(n, callback) {
-	if (typeof n !== 'number') {
-		// Intentionally over picky, it's an example...
-		callback(new Error('n must be a number'), null);
-	}
-
-	callback(null, n % 2 === 0);
-}
-                    </code></pre>
+                	<blockquote>A promise is an object that represents the return value or the thrown exception that the function may eventually provide</blockquote>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+var promise = waitForPromise('My First Promise');
+                	</pre></code>
                 </section>
                 <section>
-                    <p>Individually these callbacks aren't such a big problem</p>
+                	<ul>
+	                	<li>Promises have been implemented independently in many libraries and many common patterns arrose.</li>
+	                	<li>The CommonJS group made a informal <a href="http://wiki.commonjs.org/wiki/Promises/A">Promises/A</a> standard that then served as a baseline for further implementations.</li>
+	                	<li><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+</a> clarified the behavior of the CommonJS work focusing on providing a minimal API for interoperable promises.
+	                	</li>
+                	</ul>
                 </section>
                 <section>
-                    <pre><code>
-try {
-	var result = isEven(someValue);
-
-	console.log('someValue is ' + result ? 'even' : 'odd');
-} catch (e) {
-	console.log('that didnt work');
-}
-                    </code></pre>
-                    <p>becomes...</p>
-                </section>
-                <section>
-                    <pre><code>
-isEven(someValue, function(err, result) {
-	if (err) {
-		console.log('that didnt work');
-	} else {
-		console.log('someValue is ' + result ? 'even' : 'odd');
-	}
-});
-                    </code></pre>
-                </section>
-                <section>
-                    <p>However your challenges grow the more you try to compose these callbacks</p>
-                </section>
-                <section>
-                    <pre><code>
-try {
-	var result1 = isEven(someValue1),
-		result2 = isEven(someValue2),
-		result3 = isEven(someValue3);
-
-	// do something with results
-} catch (e) {
-	console.log('that didnt work');
-}
-                    </code></pre>
-                    <p>becomes...</p>
+                	<p>A promise is pending until it is either resolved with a value, or rejected with a reason.</p>
                 </section>
                 <section>
                     <img src="http://yuml.me/5bfae8b8" alt="promise states" />
                 </section>
+                <section>
+                	<p>Promises in JS conventionally have a <code>then</code> function that allow you to attach callbacks to receive the intended return value or thrown exception</p>
+                </section>
+                <section>
+                	<p><code>promise.then(onFulfilled, onRejected)</code></p>
+                </section>
                 <section data-promise-example>
-                    <pre><code>
-waitForPromise('Promise 1')
-    .then(function() {
-        return waitForPromise('Promise 2');
-    })
-    .then(alertArg('resolved'), alertArg('rejected'));
-                    </code></pre>
-                    <div class="promises"></div>
+                	<pre><code>
+var promise = waitForPromise('My First Promise');
+
+promise.then(
+	function(value) { alert('fulfilled'); }, 
+	function(reason) { alert('rejected'); }
+);
+                	</pre></code>
+                </section>
+                <section>
+                	<p><code>then</code> may be called multiple times on the same promise.</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+var promise = waitForPromise('Another Promise');
+
+promise.then(
+	function(value) { alert('fulfilled 1'); }, 
+	function(reason) { alert('rejected 1'); }
+);
+
+promise.then(
+	function(value) { alert('fulfilled 2'); }, 
+	function(reason) { alert('rejected 2'); }
+);
+                	</pre></code>
+                </section>
+                <section>
+                	<p>Both <code>onFulfilled</code> and <code>onRejected</code> are optional arguments</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+var promise = waitForPromise('Another Promise');
+
+promise.then(function(value) { alert('fulfilled'); });
+
+promise.then(null, function(reason) { alert('rejected'); });
+                	</pre></code>
+                </section>
+                <section>
+                	<p><code>then</code> must return a promise</p>
+                	<p><code>promise2 = promise1.then(onFulfilled, onRejected);</code></p>
+                	<p>This allows us to chain multiple <code>then</code> calls</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+var promise = waitForPromise('Another Promise');
+
+promise
+	.then(function(value) { alert('fulfilled'); })
+	.then(null, function(reason) { alert('rejected'); });
+                	</pre></code>
+                </section>
+                <section>
+                	<p>It's the behavior of this returned promise that makes composing multiple asynchronous calls possible</p>
+                </section>
+                <section>
+                	<p>If either <code>onFulfilled</code> or <code>onRejected</code> returns a value that is not a promise, promise2 must be fulfilled with that value.</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+var promise = waitForPromise('My Promise');
+
+promise
+	.then(function(value) { return 42; })
+	.then(function(value) { alert(value); });
+                	</pre></code>
+                </section>
+                <section>
+                	<p>If either <code>onFulfilled</code> or <code>onRejected</code> throws an exception, promise2 must be rejected with the thrown exception as the reason.</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+var promise = waitForPromise('My Promise');
+
+promise
+	.then(function(value) { throw new Error('ARGGG!'); })
+	.then(
+		function(value) { alert('Fulfilled: ' + value); },
+		function(reason) { alert('Rejected: ' + reason)});
+                	</pre></code>
+                </section>
+                <section>
+                	<p>If either <code>onFulfilled</code> or <code>onRejected</code> returns a promise (call it returnedPromise), promise2 must assume the state of returnedPromise</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+var promise = waitForPromise('Promise 1');
+
+promise
+	.then(function() { return waitForPromise('Promise 2'); })
+	.then(function() { return waitForPromise('Promise 3'); })
+	.then(
+		function(value) { alert('Fulfilled: ' + value); },
+		function(reason) { alert('Rejected: ' + reason); }
+	);
+                	</pre></code>
                 </section>
 			</div>
 
