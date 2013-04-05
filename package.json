@@ -6,7 +6,7 @@
   "subdomain": "promises-by-example",
   "scripts": {
     "test": "grunt jshint",
-    "start": ""
+    "start": "node plugin/notes-server"
   },
   "author": {
     "name": "David Padbury",
