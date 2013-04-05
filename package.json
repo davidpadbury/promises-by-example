@@ -1,7 +1,7 @@
 {
   "name": "promises-by-example",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.1-1",
   "description": "Introduction talk to Promises in JavaScript",
   "subdomain": "promises-by-example",
   "scripts": {
