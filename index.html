@@ -287,6 +287,98 @@ promise
 	);
                 	</pre></code>
                 </section>
+                <section>
+                    <p>Due to the behavior of the returned promise this makes exception handling from any of these calls easy.</p>
+                </section>
+                <section>
+                    <pre><code>
+try {
+    waitForPromise('Promise 1');
+    waitForPromise('Promise 2');
+    waitForPromies('Promise 3');
+}
+catch (e) {
+    alert('That didnt go to plan');
+}
+                    </code></pre>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+waitForPromise('Promise 1')
+	.then(function() { return waitForPromise('Promise 2'); })
+	.then(function() { return waitForPromise('Promise 3'); })
+	.then(
+        null,
+		function(e) { alert('That didnt go to plan'); }
+	);
+                	</pre></code>
+                </section>
+                <section>
+                    <p>So how do I use promises?</p>
+                </section>
+                <section>
+                    <p>jQuery is by far the most available library to provide promises</p>
+                </section>
+                <section>
+                    <pre><code>
+$.get("test.php").then(
+    function(){ alert("$.get succeeded"); },
+    function(){ alert("$.get failed!"); }
+);
+                    </code></pre>
+                </section>
+                <section>
+                    <p>However it's <code>then</code> behavior misses a number of elements from the Promises/A specification that can help with error handling.</p>
+                    <p>It's also challenging to reuse outside of a jQuery environment (such as node)</p>
+                </section>
+                <section>
+                    <p>There are a number of Promises/A+ implementations</p>
+                    <ul>
+                        <li><a href="https://github.com/kriskowal/q">Q</a></il>
+                        <li><a href="https://github.com/tildeio/rsvp.js">RSVP.js</a></li>
+                        <li><a href="https://github.com/cujojs/when">when.js</a></li>
+                    </ul>
+                </section>
+                <section>
+                    <p>These libraries fulfill the Promises/A+ specification for <code>then</code></p> and offer convenience APIs and promise consumer utilities on top of this behavior</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+Q.all([
+    waitForPromise('Promise 1'),
+    waitForPromise('Promise 2'),
+    waitForPromise('Promise 3')
+]).then(function() { alert('done'); })
+    .fail(function() { alert('one failed!'); });
+                	</pre></code>
+                </section>
+                <section>
+                    <p>The idea is if these Promise libraries can depend on a consistent behavior of <code>then</code> you'll be able to happy convert between different implementations.</p>
+                </section>
+                <section>
+                    <p>As Promises/A+ only specifies how to consume promises, not create.</p>
+                </section>
+                <section>
+                    <p>Most libraries have the concept of a <code>deferred</code>.</p>
+                    <p>Effectively a object that will produce and control a promise.</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+function waitAWhile(duration) {
+    var defer = Q.defer();
+
+    setTimeout(defer.resolve, duration);
+
+    return defer.promise;
+}
+
+waitForPromise('Click me please...')
+    .then(function() {
+        return waitAWhile(2500);
+    })
+    .then(function() { alert('done'); });
+                	</pre></code>
+                </section>
 			</div>
 
 		</div>
