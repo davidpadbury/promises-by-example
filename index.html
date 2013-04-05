@@ -40,16 +40,20 @@
 
 				<section>
 					<h1>Promises by Example</h1>
+          <br />
 					<p>
                     <small>Created by <a href="http://davidpadbury.com">David Padbury</a> / <a href="http://twitter.com/davidpadbury">@davidpadbury</a></small>
                     </p>
                     <p>
-                    <small>Presented at <a href="http://lab49.com">Lab49 DC</a> Tech Breakfast April 4th</small>
+                    <small>Presented at <a href="http://lab49.com">Lab49</a> DC Tech Breakfast</small>
+                    <p>
+                    <small>April 4, 2013</small>
+                    </p>
 					</p>
 				</section>
 
                 <section>
-                    <h3>Synchronous code can be relatively easy to understand</h3>
+                    <h3>Synchronous code can be relatively easy to understand.</h3>
                 </section>
 
                 <section>
@@ -74,7 +78,7 @@ function login(username, password) {
                 </section>
 
                 <section>
-                    <h3>But JavaScript doesn't work that way</h3>
+                    <h3>But JavaScript doesn't work that way.</h3>
                     <p>
                     <small>(And that's typically a good thing...)</small>
                     </p>
@@ -104,7 +108,7 @@ function login(username, password, callback) {
                 </section>
 
                 <section>
-                    <h3>As you have to control flow of both results and errors, the code becomes increasingly noisy</h3>
+                    <h3>As you have to control flow of both results and errors, the code becomes increasingly noisy.</h3>
                 </section>
 
                 <section>
@@ -146,22 +150,22 @@ function login(username, password, callback) {
                     </code></pre>
                 </section>
                 <section>
-                    <h3>Traditionally flow control is determined by <code>return</code> and <code>throw</code></h3>
+                    <h3>Traditionally, flow control is determined by <code>return</code> and <code>throw</code>.</h3>
                 </section>
                 <section>
-                    <h3>Async makes that utterly useless</h3>
+                    <h3>Async makes that utterly useless.</h3>
                 </section>
                 <section>
-                    <p>There are already popular conventions of how to represent a function result or error</p>
+                    <p>There are already popular conventions of how to represent a function result or error.</p>
                 </section>
                 <section>
                     <p><code>function callback(err, value) { ... }</code></p>
                 </section>
                 <section>
-                	<p>Promises are a slightly different approach</p>
+                	<p>Promises are a slightly different approach.</p>
                 </section>
                 <section>
-                	<blockquote>A promise is an object that represents the return value or the thrown exception that the function may eventually provide</blockquote>
+                	<blockquote>A promise is an object that represents the return value or the thrown exception that the function may eventually provide.</blockquote>
                     <p><h6><a href="https://github.com/kriskowal/q">Q</a></h6></p>
                 </section>
                 <section data-promise-example>
@@ -171,20 +175,20 @@ var promise = waitForPromise('My First Promise');
                 </section>
                 <section>
                 	<ul>
-	                	<li>Promises have been implemented independently in many libraries and many common patterns arrose.</li>
-	                	<li>The CommonJS group made a informal <a href="http://wiki.commonjs.org/wiki/Promises/A">Promises/A</a> standard that then served as a baseline for further implementations.</li>
-	                	<li><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+</a> clarified the behavior of the CommonJS work focusing on providing a minimal API for interoperable promises.
+	                	<li>Promises have been implemented independently in many libraries and many common patterns arose.</li>
+	                	<li>The CommonJS group made an informal <a href="http://wiki.commonjs.org/wiki/Promises/A">Promises/A</a> standard that then served as a baseline for further implementations.</li>
+	                	<li><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+</a> clarified the behavior of the CommonJS work, focusing on providing a minimal API for interoperable promises.
 	                	</li>
                 	</ul>
                 </section>
                 <section>
-                	<p>A promise is pending until it is either resolved with a value, or rejected with a reason.</p>
+                	<p>A promise is pending until it is either fulfilled with a value or rejected with a reason.</p>
                 </section>
                 <section>
                     <img src="http://yuml.me/5bfae8b8" alt="promise states" />
                 </section>
                 <section>
-                	<p>Promises in JS conventionally have a <code>then</code> function that allow you to attach callbacks to receive the intended return value or thrown exception</p>
+                	<p>Promises in JS conventionally have a <code>then</code> function that allows you to attach callbacks which will receive the intended return value or thrown exception.</p>
                 </section>
                 <section>
                 	<p><code>promise.then(onFulfilled, onRejected)</code></p>
@@ -237,7 +241,7 @@ promise.then(null, function(reason) { alert('rejected'); });
                         <p><code>promise2 = promise1.then(onFulfilled, onRejected);</code></p>
                     </blockquote>
                     <p><small><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+ 3.2.5</a></small></p>
-                	<p>This allows us to chain multiple <code>then</code> calls</p>
+                	<p>This allows us to chain multiple <code>then</code> calls.</p>
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -249,7 +253,7 @@ promise
                 	</pre></code>
                 </section>
                 <section>
-                	<p>It's the behavior of this returned promise that makes composing multiple asynchronous calls possible</p>
+                	<p>Returning a promise makes composing multiple asynchronous calls possible.</p>
                 </section>
                 <section>
                     <blockquote>If either <code>onFulfilled</code> or <code>onRejected</code> returns a value that is not a promise, promise2 must be fulfilled with that value.</blockquote>
@@ -297,7 +301,7 @@ promise
                 	</pre></code>
                 </section>
                 <section>
-                    <p>Due to the behavior of the returned promise this makes exception handling from any of these calls easy.</p>
+                    <p>Returning a promise makes exception handling from any of these calls easy.</p>
                 </section>
                 <section>
                     <pre><code>
@@ -323,7 +327,7 @@ waitForPromise('Promise 1')
                 	</pre></code>
                 </section>
                 <section>
-                    <p>We can then use normal flow control to flow asynchronous calls</p>
+                    <p>We can then use normal flow control to flow asynchronous calls.</p>
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -344,7 +348,7 @@ waitForPromise('Click to start')
                     <p>So how do I use promises?</p>
                 </section>
                 <section>
-                    <p>jQuery is by far the most available library to provide promises</p>
+                    <p>jQuery is by far the most available library that provides promises.</p>
                 </section>
                 <section>
                     <pre><code>
@@ -355,8 +359,8 @@ $.get("test.php").then(
                     </code></pre>
                 </section>
                 <section>
-                    <p>However it's <code>then</code> behavior misses a number of elements from the Promises/A specification that can help with error handling.<sup>*</sup></p>
-                    <p>It's also challenging to reuse outside of a jQuery environment (such as node)</p>
+                    <p>However its <code>then</code> behavior misses a number of elements from the Promises/A specification that can help with error handling.<sup>*</sup></p>
+                    <p>It's also challenging to reuse outside of a jQuery environment (such as node).</p>
                     <p><small>* <a href="http://domenic.me/2012/10/14/youre-missing-the-point-of-promises/">You're missing the point of promises</a> by <a href="https://twitter.com/domenic">@domenic</a></small></p>
                 </section>
                 <section>
@@ -368,7 +372,7 @@ $.get("test.php").then(
                     </ul>
                 </section>
                 <section>
-                    <p>These libraries fulfill the Promises/A+ specification for <code>then</code></p> and offer convenience APIs and promise consumer utilities on top of this behavior</p>
+                    <p>These libraries fulfill the Promises/A+ specification for <code>then</code></p> and offer convenience APIs and promise consumer utilities on top of this behavior.</p>
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -381,14 +385,14 @@ Q.all([
                 	</pre></code>
                 </section>
                 <section>
-                    <p>The idea is if these Promise libraries can depend on a consistent behavior of <code>then</code> you'll be able to happy convert between different implementations.</p>
+                    <p>The idea is that if these Promise libraries can depend on a consistent behavior of <code>then</code>, you'll be able to happily convert between different implementations.</p>
                 </section>
                 <section>
                     <p>As Promises/A+ only specifies how to consume promises, most libraries have different methods of creating them.</p>
                 </section>
                 <section>
-                    <p>Many use the concept of a <code>deferred</code>.</p>
-                    <p>Effectively a object that will produce and control a promise.</p>
+                    <p>Many use the concept of a <code>deferred</code>&mdash;</p>
+                    <p>effectively an object that will produce and control a promise.</p>
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -466,7 +470,7 @@ function login(username, password) {
                     </ul>
                 </section>
                 <section>
-                    <p>I've found them particularly well suited to UI work and less than straight forward asynchronous workflows.</p>
+                    <p>I've found them particularly well-suited to UI work and less-than-straightforward asynchronous workflows.</p>
                     <p>But your experiences and aesthetics will likely vary.</p>
                 </section>
                 <section>
