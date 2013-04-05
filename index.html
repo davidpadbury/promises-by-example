@@ -49,7 +49,7 @@
 				</section>
 
                 <section>
-                    <h3>Synchronous code is relatively easy to understand</h3>
+                    <h3>Synchronous code can be relatively easy to understand</h3>
                 </section>
 
                 <section>
@@ -152,7 +152,7 @@ function login(username, password, callback) {
                     <h3>Async makes that utterly useless</h3>
                 </section>
                 <section>
-                    <p>There are already popular conventions of how to represent function result or error</p>
+                    <p>There are already popular conventions of how to represent a function result or error</p>
                 </section>
                 <section>
                     <p><code>function callback(err, value) { ... }</code></p>
@@ -162,6 +162,7 @@ function login(username, password, callback) {
                 </section>
                 <section>
                 	<blockquote>A promise is an object that represents the return value or the thrown exception that the function may eventually provide</blockquote>
+                    <p><h6><a href="https://github.com/kriskowal/q">Q</a></h6></p>
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -199,7 +200,8 @@ promise.then(
                 	</pre></code>
                 </section>
                 <section>
-                	<p><code>then</code> may be called multiple times on the same promise.</p>
+                	<blockquote><code>then</code> may be called multiple times on the same promise.</blockquote>
+                    <p><small><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+ 3.2.5</a></small></p>
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -217,7 +219,8 @@ promise.then(
                 	</pre></code>
                 </section>
                 <section>
-                	<p>Both <code>onFulfilled</code> and <code>onRejected</code> are optional arguments</p>
+                	<blockquote>Both <code>onFulfilled</code> and <code>onRejected</code> are optional arguments</blockquote>
+                    <p><small><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+ 3.2.1</a></small></p>
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -229,8 +232,11 @@ promise.then(null, function(reason) { alert('rejected'); });
                 	</pre></code>
                 </section>
                 <section>
-                	<p><code>then</code> must return a promise</p>
-                	<p><code>promise2 = promise1.then(onFulfilled, onRejected);</code></p>
+                    <blockquote>
+                        <p><code>then</code> must return a promise</p>
+                        <p><code>promise2 = promise1.then(onFulfilled, onRejected);</code></p>
+                    </blockquote>
+                    <p><small><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+ 3.2.5</a></small></p>
                 	<p>This allows us to chain multiple <code>then</code> calls</p>
                 </section>
                 <section data-promise-example>
@@ -246,7 +252,8 @@ promise
                 	<p>It's the behavior of this returned promise that makes composing multiple asynchronous calls possible</p>
                 </section>
                 <section>
-                	<p>If either <code>onFulfilled</code> or <code>onRejected</code> returns a value that is not a promise, promise2 must be fulfilled with that value.</p>
+                    <blockquote>If either <code>onFulfilled</code> or <code>onRejected</code> returns a value that is not a promise, promise2 must be fulfilled with that value.</blockquote>
+                    <p><small><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+ 3.2.6.1</a></small></p>                    
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -258,7 +265,8 @@ promise
                 	</pre></code>
                 </section>
                 <section>
-                	<p>If either <code>onFulfilled</code> or <code>onRejected</code> throws an exception, promise2 must be rejected with the thrown exception as the reason.</p>
+                	<blockquote>If either <code>onFulfilled</code> or <code>onRejected</code> throws an exception, promise2 must be rejected with the thrown exception as the reason.</blockquote>
+                    <p><small><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+ 3.2.6.2</a></small></p>                    
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -272,7 +280,8 @@ promise
                 	</pre></code>
                 </section>
                 <section>
-                	<p>If either <code>onFulfilled</code> or <code>onRejected</code> returns a promise (call it returnedPromise), promise2 must assume the state of returnedPromise</p>
+                	<blockquote>If either <code>onFulfilled</code> or <code>onRejected</code> returns a promise (call it returnedPromise), promise2 must assume the state of returnedPromise</blockquote>
+                    <p><small><a href="http://promises-aplus.github.com/promises-spec/">Promises/A+ 3.2.6.3</a></small></p>
                 </section>
                 <section data-promise-example>
                 	<pre><code>
@@ -314,6 +323,24 @@ waitForPromise('Promise 1')
                 	</pre></code>
                 </section>
                 <section>
+                    <p>We can then use normal flow control to flow asynchronous calls</p>
+                </section>
+                <section data-promise-example>
+                	<pre><code>
+waitForPromise('Click to start')
+    .then(function() {
+        if (Date.now() % 2 === 0) {
+            return waitForPromise('Even time promise');
+        } else {
+            return waitForPromise('Odd time promise');
+        }
+    })
+	.then(
+		function(value) { alert('Done with ' + value); }
+	);
+                	</pre></code>
+                </section>
+                <section>
                     <p>So how do I use promises?</p>
                 </section>
                 <section>
@@ -328,8 +355,9 @@ $.get("test.php").then(
                     </code></pre>
                 </section>
                 <section>
-                    <p>However it's <code>then</code> behavior misses a number of elements from the Promises/A specification that can help with error handling.</p>
+                    <p>However it's <code>then</code> behavior misses a number of elements from the Promises/A specification that can help with error handling.<sup>*</sup></p>
                     <p>It's also challenging to reuse outside of a jQuery environment (such as node)</p>
+                    <p><small>* <a href="http://domenic.me/2012/10/14/youre-missing-the-point-of-promises/">You're missing the point of promises</a> by <a href="https://twitter.com/domenic">@domenic</a></small></p>
                 </section>
                 <section>
                     <p>There are a number of Promises/A+ implementations</p>
@@ -356,10 +384,10 @@ Q.all([
                     <p>The idea is if these Promise libraries can depend on a consistent behavior of <code>then</code> you'll be able to happy convert between different implementations.</p>
                 </section>
                 <section>
-                    <p>As Promises/A+ only specifies how to consume promises, not create.</p>
+                    <p>As Promises/A+ only specifies how to consume promises, most libraries have different methods of creating them.</p>
                 </section>
                 <section>
-                    <p>Most libraries have the concept of a <code>deferred</code>.</p>
+                    <p>Many use the concept of a <code>deferred</code>.</p>
                     <p>Effectively a object that will produce and control a promise.</p>
                 </section>
                 <section data-promise-example>
@@ -378,6 +406,69 @@ waitForPromise('Click me please...')
     })
     .then(function() { alert('done'); });
                 	</pre></code>
+                </section>
+                <section>
+                    <p>To come back to our original example...</p>
+                </section>
+                <section>
+                    <pre><code>
+function login(username, password) {
+	var user = User.findOne({ username: username });
+
+	if (!user) {
+		return false;
+	}
+	
+	var passwordsMatch = bcrypt.compare(user.passwordHash, password);
+
+	if (passwordsMatch) {
+		user.lastLoggedIn = Date.now();
+		user.save();
+	}
+
+	return passwordsMatch;
+}
+                    </pre></code>
+                    <p>becomes...</p>
+                </section>
+                <section>
+                    <pre><code>
+function login(username, password) {
+	return User.findOne({ username: username })
+		.then(function(user) {
+			if (!user) {
+				return false;
+			}
+
+			return bcrypt.compare(user.passwordHash, password)
+				.then(function(passwordsMatch) {
+					if (passwordsMatch) {
+						user.lastLoggedIn = Date.now();
+						return user.save().then(function() {
+							return passwordsMatch;
+						});
+					}
+
+					return passwordsMatch;
+				});
+		});
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <p>Admittedly still not as great as the ideal, but not too far off and relatively readable.</p>
+                </section>
+                <section>
+                    <p>Like most things in JavaScript that involve a choice, Promises are hotly debated.</p>
+                    <p><a href="http://blog.jcoglan.com/2013/03/30/callbacks-are-imperative-promises-are-functional-nodes-biggest-missed-opportunity/">..Promises..: Node's biggest missed opportunity</a> by James Coglan</p>
+                    <p><a href="http://www.futurealoof.com/posts/broken-promises.html#">Broken Promises</a> by Mikeal Rogers</p>
+                </section>
+                <section>
+                    <p>I've found them particularly well suited to UI work and less than straight forward asynchronous workflows.</p>
+                    <p>But your experiences and aesthetics will likely vary.</p>
+                </section>
+                <section>
+                    <h3><code>talk.resolve('Cheers');</code></h3>
                 </section>
 			</div>
 
@@ -398,7 +489,7 @@ waitForPromise('Click me please...')
 				center: true,
 
 				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+				transition: Reveal.getQueryHash().transition || 'concave', // default/cube/page/concave/zoom/linear/fade/none
 
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
